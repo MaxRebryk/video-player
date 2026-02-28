@@ -1,15 +1,19 @@
 import React, { useRef, useState, useCallback } from "react";
-import type { Chapter } from "../../types/video.types";
-import ChapterTooltip from "../chapter-tooltip.component";
+import type { Chapter } from "@/video-player/types/video.types";
+import ChapterTooltip from "@/video-player/components/chapter-tooltip/chapter-tooltip.component";
 import styles from "./timeline.module.css";
 
 function getChapterAtTime(chapters: Chapter[], time: number): Chapter | null {
-  return (
-    chapters.find((c) => time >= c.start && time < c.end) ?? null
-  );
+  return chapters.find((c) => time >= c.start && time < c.end) ?? null;
 }
 
-const CHAPTER_COLOR = "rgba(255, 255, 255, 0.5)";
+interface TimelineProps {
+  videoRef: React.RefObject<HTMLVideoElement | null>;
+  chapters: Chapter[];
+  videoLength: number;
+  currentTime: number;
+  isLoaded: boolean;
+}
 
 export default function Timeline({
   videoRef,
@@ -17,13 +21,7 @@ export default function Timeline({
   videoLength,
   currentTime,
   isLoaded,
-}: {
-  videoRef: React.RefObject<HTMLVideoElement | null>;
-  chapters: Chapter[];
-  videoLength: number;
-  currentTime: number;
-  isLoaded: boolean;
-}) {
+}: TimelineProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [hoverTime, setHoverTime] = useState<number | null>(null);
   const [hoverChapter, setHoverChapter] = useState<Chapter | null>(null);
@@ -92,18 +90,12 @@ export default function Timeline({
               <div
                 key={i}
                 className={styles.chapterSegment}
-                style={{
-                  flex: duration,
-                  background: CHAPTER_COLOR,
-                }}
+                style={{ flex: duration }}
               />
             );
           })
         ) : (
-          <div
-            className={styles.chapterSegment}
-            style={{ flex: 1, background: CHAPTER_COLOR }}
-          />
+          <div className={styles.chapterSegment} style={{ flex: 1 }} />
         )}
         <div
           className={styles.progressFill}

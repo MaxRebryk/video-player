@@ -1,15 +1,18 @@
 import React, { useState } from "react";
-import { VolumeIcon, MutedIcon } from "./icons";
+import { VolumeIcon, MutedIcon } from "@/video-player/icons/icons";
+import styles from "./volume-control.module.css";
+
+interface VolumeControlProps {
+  videoRef: React.RefObject<HTMLVideoElement | null>;
+  volume: number;
+  isMuted: boolean;
+}
 
 export default function VolumeControl({
   videoRef,
   volume,
   isMuted,
-}: {
-  videoRef: React.RefObject<HTMLVideoElement | null>;
-  volume: number;
-  isMuted: boolean;
-}) {
+}: VolumeControlProps) {
   const [prevVolume, setPrevVolume] = useState(1);
 
   const handleMuteToggle = () => {
@@ -33,9 +36,10 @@ export default function VolumeControl({
   };
 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+    <div className={styles.wrapper}>
       <button
         type="button"
+        className={styles.button}
         onClick={handleMuteToggle}
         aria-label={isMuted ? "Unmute" : "Mute"}
       >
@@ -43,6 +47,7 @@ export default function VolumeControl({
       </button>
       <input
         type="range"
+        className={styles.slider}
         min={0}
         max={1}
         step={0.1}

@@ -2,3 +2,18 @@ body {
   margin: 0;
   background: #f5f5f5;
 }
+
+body.in-fullscreen {
+  overflow: hidden;
+}
+
+/* Прибрати фокус обводку на плеєрі */
+[data-video-player],
+[data-video-player] * {
+  outline: none;
+}
+
+[data-video-player]:focus,
+[data-video-player] *:focus {
+  outline: none;
+}

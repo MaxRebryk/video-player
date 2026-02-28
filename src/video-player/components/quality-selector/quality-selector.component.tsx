@@ -1,24 +1,30 @@
 import React, { useState, useEffect, useRef } from "react";
-import type { HlsLevel } from "../../types/video.types";
-import { SettingsIcon } from "./icons";
+import type { HlsLevel } from "@/video-player/types/video.types";
+import { SettingsIcon } from "@/video-player/icons/icons";
+import styles from "./quality-selector.module.css";
+
+interface QualitySelectorProps {
+  levels: HlsLevel[];
+  currentLevel: number;
+  setLevel: (level: number) => void;
+  hlsSupported: boolean;
+}
 
 export default function QualitySelector({
   levels,
   currentLevel,
   setLevel,
   hlsSupported,
-}: {
-  levels: HlsLevel[];
-  currentLevel: number;
-  setLevel: (level: number) => void;
-  hlsSupported: boolean;
-}) {
+}: QualitySelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -31,12 +37,13 @@ export default function QualitySelector({
   if (!hlsSupported || levels.length === 0) return null;
 
   const currentLabel =
-    currentLevel === -1 ? "Auto" : `${levels[currentLevel]?.height}p` ?? "Auto";
+    currentLevel === -1 ? "Auto" : `${levels[currentLevel]?.height ?? 0}p`;
 
   return (
-    <div ref={containerRef} style={{ position: "relative" }}>
+    <div ref={containerRef} className={styles.container}>
       <button
         type="button"
+        className={styles.trigger}
         onClick={(e) => {
           e.stopPropagation();
           setIsOpen(!isOpen);
@@ -46,34 +53,14 @@ export default function QualitySelector({
         <SettingsIcon />
       </button>
       {isOpen && (
-        <ul
-          style={{
-            position: "absolute",
-            bottom: "100%",
-            right: 0,
-            marginBottom: 4,
-            margin: 0,
-            padding: 4,
-            listStyle: "none",
-            background: "rgba(0,0,0,0.9)",
-            borderRadius: 4,
-            minWidth: 80,
-          }}
-        >
+        <ul className={styles.menu}>
           <li>
             <button
+              type="button"
+              className={`${styles.menuItem} ${currentLevel === -1 ? styles.menuItemActive : ""}`}
               onClick={() => {
                 setLevel(-1);
                 setIsOpen(false);
-              }}
-              style={{
-                width: "100%",
-                textAlign: "left",
-                padding: "4px 8px",
-                background: currentLevel === -1 ? "#555" : "transparent",
-                border: "none",
-                color: "white",
-                cursor: "pointer",
               }}
             >
               Auto
@@ -82,18 +69,11 @@ export default function QualitySelector({
           {levels.map((level, index) => (
             <li key={index}>
               <button
+                type="button"
+                className={`${styles.menuItem} ${currentLevel === index ? styles.menuItemActive : ""}`}
                 onClick={() => {
                   setLevel(index);
                   setIsOpen(false);
-                }}
-                style={{
-                  width: "100%",
-                  textAlign: "left",
-                  padding: "4px 8px",
-                  background: currentLevel === index ? "#555" : "transparent",
-                  border: "none",
-                  color: "white",
-                  cursor: "pointer",
                 }}
               >
                 {level.height}p

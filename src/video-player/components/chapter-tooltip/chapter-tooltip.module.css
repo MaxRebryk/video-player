@@ -1,0 +1,16 @@
+.tooltip {
+  position: fixed;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 4px;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 1000;
+  white-space: nowrap;
+}
+
+.title {
+  opacity: 0.9;
+}

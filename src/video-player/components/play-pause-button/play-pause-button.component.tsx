@@ -1,16 +1,20 @@
 import React from "react";
-import { PlayIcon, PauseIcon } from "./icons";
+import { PlayIcon, PauseIcon } from "@/video-player/icons/icons";
+import styles from "./play-pause-button.module.css";
+
+interface PlayPauseButtonProps {
+  isPlaying: boolean;
+  videoRef: React.RefObject<HTMLVideoElement | null>;
+}
 
 export default function PlayPauseButton({
   isPlaying,
   videoRef,
-}: {
-  isPlaying: boolean;
-  videoRef: React.RefObject<HTMLVideoElement | null>;
-}) {
+}: PlayPauseButtonProps) {
   return (
     <button
       type="button"
+      className={styles.button}
       onClick={() => {
         if (isPlaying) {
           videoRef.current?.pause();

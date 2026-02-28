@@ -1,0 +1,52 @@
+.container {
+  position: relative;
+}
+
+.trigger {
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+.trigger:hover {
+  color: #b3d9f2;
+}
+
+.trigger svg {
+  width: 20px;
+  height: 20px;
+}
+
+.menu {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  margin-bottom: 4px;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: 4px;
+  min-width: 80px;
+}
+
+.menuItem {
+  width: 100%;
+  text-align: left;
+  padding: 4px 8px;
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.menuItemActive {
+  background: #555;
+}

@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import Hls from "hls.js";
-import type { HlsLevel } from "../types/video.types";
+import type { HlsLevel } from "@/video-player/types/video.types";
 
 type VideoRef = React.RefObject<HTMLVideoElement | null>;
 
@@ -36,7 +36,7 @@ export default function useHlsPlayer(videoRef: VideoRef, url: string) {
               height: l.height,
               width: l.width,
               bitrate: l.bitrate,
-              url: l.url,
+              url: Array.isArray(l.url) ? l.url[0] : (l.url as string | undefined),
             })),
           );
         }

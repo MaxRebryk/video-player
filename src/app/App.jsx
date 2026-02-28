@@ -1,9 +1,7 @@
-import { useState } from "react";
-import VideoPlayer from "../video-player/components/video-player.component";
+import VideoPlayer from "@/video-player/components/video-player/video-player.component";
 import styles from "./App.module.css";
-function App() {
-  const [count, setCount] = useState(0);
 
+function App() {
   return (
     <div className={styles.app}>
       <h1>Video Player</h1>
