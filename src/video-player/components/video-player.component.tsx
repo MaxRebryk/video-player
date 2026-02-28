@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useRef } from "react";
+import VideoCanvas from "./video-canvas.component";
 
-const videoPlayerComponent = () => {
-  return <div>videoPlayerComponent</div>;
+const VideoPlayer = () => {
+  const videoElement = useRef<HTMLVideoElement>(null);
+  return (
+    <div>
+      <VideoCanvas videoElement={videoElement.current as HTMLVideoElement} />
+    </div>
+  );
 };
 
-export default videoPlayerComponent;
+export default VideoPlayer;
