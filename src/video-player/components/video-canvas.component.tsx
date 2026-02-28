@@ -1,15 +1,13 @@
-import React, { useRef } from "react";
-import { videoData } from "../mocs/video-data";
-import Hls from "hls.js";
-import useHlsPlayer from "../hooks/useHlsPlayer";
+import React from "react";
 
 export default function VideoCanvas({
-  videoElement,
+  videoRef,
 }: {
-  videoElement: HTMLVideoElement;
+  videoRef: React.RefObject<HTMLVideoElement | null>;
 }) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  useHlsPlayer(videoRef, videoData.hlsPlaylistUrl);
-
-  return <video ref={videoRef} controls={false} playsInline />;
+  return (
+    <div className="video-fill-wrapper">
+      <video ref={videoRef} controls={false} playsInline />
+    </div>
+  );
 }

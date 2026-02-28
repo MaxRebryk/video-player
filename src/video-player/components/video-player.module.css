@@ -1,0 +1,140 @@
+.player {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  min-width: 320px;
+  background: #fff;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #b3d9f2;
+}
+
+.videoWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  overflow: hidden;
+}
+
+.videoWrapper :global(.video-fill-wrapper) {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.videoWrapper :global(.video-fill-wrapper) video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Fullscreen: fill entire screen - use both pseudo-class and data attribute for reliability */
+.player:fullscreen,
+.player:-webkit-full-screen,
+.player:-moz-full-screen,
+.player:-ms-fullscreen,
+.playerFullscreen {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: none !important;
+  min-width: 0 !important;
+}
+
+.player:fullscreen .videoWrapper,
+.player:-webkit-full-screen .videoWrapper,
+.player:-moz-full-screen .videoWrapper,
+.player:-ms-fullscreen .videoWrapper,
+.playerFullscreen .videoWrapper {
+  flex: 1 1 0 !important;
+  min-height: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  aspect-ratio: auto !important;
+}
+
+.player:fullscreen .videoWrapper :global(.video-fill-wrapper),
+.player:-webkit-full-screen .videoWrapper :global(.video-fill-wrapper),
+.player:-moz-full-screen .videoWrapper :global(.video-fill-wrapper),
+.player:-ms-fullscreen .videoWrapper :global(.video-fill-wrapper),
+.playerFullscreen .videoWrapper :global(.video-fill-wrapper) {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.player:fullscreen .videoWrapper :global(.video-fill-wrapper) video,
+.player:-webkit-full-screen .videoWrapper :global(.video-fill-wrapper) video,
+.player:-moz-full-screen .videoWrapper :global(.video-fill-wrapper) video,
+.player:-ms-fullscreen .videoWrapper :global(.video-fill-wrapper) video,
+.playerFullscreen .videoWrapper :global(.video-fill-wrapper) video {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100% !important;
+  min-height: 100% !important;
+  object-fit: cover !important;
+}
+
+.controlsOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
+  padding: 8px 12px 12px;
+}
+
+.progressBar {
+  margin-bottom: 8px;
+}
+
+.controlsRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.controlsOverlay button {
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+.controlsOverlay button:hover {
+  color: #b3d9f2;
+}
+
+.controlsOverlay button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.controlsOverlay input[type="range"] {
+  width: 72px;
+  height: 4px;
+  accent-color: #fff;
+}
+
+.controlsOverlay .time-display,
+.controlsOverlay [class*="timeDisplay"] {
+  color: #fff;
+  font-size: 13px;
+  font-family: system-ui, sans-serif;
+}
