@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { videoData } from "@/video-player/mocs/video-data";
+import { videoData } from "@/video-player/mocks/video-data";
 import useHlsPlayer from "@/video-player/hooks/useHlsPlayer";
 import { useVideoState } from "@/video-player/hooks/useVideoState";
 import VideoCanvas from "@/video-player/components/video-canvas/video-canvas.component";
@@ -11,9 +11,12 @@ import FullscreenButton from "@/video-player/components/fullscreen-button/fullsc
 import Timeline from "@/video-player/components/timeline/timeline.component";
 import styles from "./video-player.module.css";
 
+const DEFAULT_VOLUME = 0.5;
+
 export default function VideoPlayer() {
   const playerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [prevVolume, setPrevVolume] = useState(1);
   const { levels, currentLevel, setLevel, hlsInstance } = useHlsPlayer(
     videoRef,
     videoData.hlsPlaylistUrl,
@@ -21,6 +24,33 @@ export default function VideoPlayer() {
   const { isPlaying, currentTime, duration, volume, isMuted } =
     useVideoState(videoRef);
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  const handlePlay = useCallback(() => videoRef.current?.play(), []);
+  const handlePause = useCallback(() => videoRef.current?.pause(), []);
+  const handleSeek = useCallback((time: number) => {
+    const video = videoRef.current;
+    if (video) video.currentTime = time;
+  }, []);
+  const handleMuteToggle = useCallback(
+    (volumeToSave?: number) => {
+      const video = videoRef.current;
+      if (!video) return;
+      if (video.muted) {
+        video.muted = false;
+        video.volume = volumeToSave ?? prevVolume ?? DEFAULT_VOLUME;
+      } else {
+        setPrevVolume(volumeToSave ?? video.volume);
+        video.muted = true;
+      }
+    },
+    [prevVolume],
+  );
+  const handleVolumeChange = useCallback((value: number) => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.volume = value;
+    video.muted = value === 0;
+  }, []);
 
   const toggleFullscreen = useCallback(() => {
     setIsFullscreen((prev) => !prev);
@@ -59,19 +89,24 @@ export default function VideoPlayer() {
         <div className={styles.controlsOverlay}>
           <div className={styles.progressBar}>
             <Timeline
-              videoRef={videoRef}
               chapters={videoData.chapters}
               videoLength={videoLength}
               currentTime={currentTime}
               isLoaded={isLoaded}
+              onSeek={handleSeek}
             />
           </div>
           <div className={styles.controlsRow}>
-            <PlayPauseButton videoRef={videoRef} isPlaying={isPlaying} />
+            <PlayPauseButton
+              isPlaying={isPlaying}
+              onPlay={handlePlay}
+              onPause={handlePause}
+            />
             <VolumeControl
-              videoRef={videoRef}
               volume={volume}
               isMuted={isMuted}
+              onMuteToggle={handleMuteToggle}
+              onVolumeChange={handleVolumeChange}
             />
             <TimeDisplay currentTime={currentTime} duration={duration} />
             <div className={styles.spacer} />

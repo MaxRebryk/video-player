@@ -4,24 +4,20 @@ import styles from "./play-pause-button.module.css";
 
 interface PlayPauseButtonProps {
   isPlaying: boolean;
-  videoRef: React.RefObject<HTMLVideoElement | null>;
+  onPlay: () => void;
+  onPause: () => void;
 }
 
 export default function PlayPauseButton({
   isPlaying,
-  videoRef,
+  onPlay,
+  onPause,
 }: PlayPauseButtonProps) {
   return (
     <button
       type="button"
       className={styles.button}
-      onClick={() => {
-        if (isPlaying) {
-          videoRef.current?.pause();
-        } else {
-          videoRef.current?.play();
-        }
-      }}
+      onClick={isPlaying ? onPause : onPlay}
       aria-label={isPlaying ? "Pause" : "Play"}
     >
       {isPlaying ? <PauseIcon /> : <PlayIcon />}

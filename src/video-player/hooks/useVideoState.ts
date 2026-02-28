@@ -18,17 +18,16 @@ export const useVideoState = (
     const video = videoRef.current;
     if (!video) return;
 
-    video.addEventListener("play", () => setIsPlaying(true));
-    video.addEventListener("pause", () => setIsPlaying(false));
-    video.addEventListener("timeupdate", () =>
-      setCurrentTime(video.currentTime),
-    );
-    video.addEventListener("durationchange", () => setDuration(video.duration));
-    video.addEventListener("volumechange", () => setVolume(video.volume));
-    video.addEventListener("playbackratechange", () =>
-      setPlaybackRate(video.playbackRate),
-    );
-    video.addEventListener("mutedchange", () => setIsMuted(video.muted));
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
+    const handleTimeUpdate = () => setCurrentTime(video.currentTime);
+    const handleDurationChange = () => setDuration(video.duration);
+    const handleVolumeChange = () => {
+      setVolume(video.volume);
+      setIsMuted(video.muted);
+    };
+    const handlePlaybackRateChange = () =>
+      setPlaybackRate(video.playbackRate);
     const handleFullscreenChange = () => {
       setIsFullscreen(
         !!document.fullscreenElement &&
@@ -36,18 +35,35 @@ export const useVideoState = (
             document.fullscreenElement.contains(video)),
       );
     };
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-    video.addEventListener("ended", () => {
+    const handleEnded = () => {
       setIsEnded(true);
       setIsPlaying(false);
-    });
-    video.addEventListener("error", () => {
+    };
+    const handleError = () => {
       setIsError(true);
       setIsPlaying(false);
-    });
+    };
+
+    video.addEventListener("play", handlePlay);
+    video.addEventListener("pause", handlePause);
+    video.addEventListener("timeupdate", handleTimeUpdate);
+    video.addEventListener("durationchange", handleDurationChange);
+    video.addEventListener("volumechange", handleVolumeChange);
+    video.addEventListener("playbackratechange", handlePlaybackRateChange);
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    video.addEventListener("ended", handleEnded);
+    video.addEventListener("error", handleError);
 
     return () => {
+      video.removeEventListener("play", handlePlay);
+      video.removeEventListener("pause", handlePause);
+      video.removeEventListener("timeupdate", handleTimeUpdate);
+      video.removeEventListener("durationchange", handleDurationChange);
+      video.removeEventListener("volumechange", handleVolumeChange);
+      video.removeEventListener("playbackratechange", handlePlaybackRateChange);
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      video.removeEventListener("ended", handleEnded);
+      video.removeEventListener("error", handleError);
     };
   }, [videoRef]);
   return {

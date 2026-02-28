@@ -1,38 +1,27 @@
-import React, { useState } from "react";
+import React from "react";
 import { VolumeIcon, MutedIcon } from "@/video-player/icons/icons";
 import styles from "./volume-control.module.css";
 
 interface VolumeControlProps {
-  videoRef: React.RefObject<HTMLVideoElement | null>;
   volume: number;
   isMuted: boolean;
+  onMuteToggle: (volumeToSave?: number) => void;
+  onVolumeChange: (value: number) => void;
 }
 
 export default function VolumeControl({
-  videoRef,
   volume,
   isMuted,
+  onMuteToggle,
+  onVolumeChange,
 }: VolumeControlProps) {
-  const [prevVolume, setPrevVolume] = useState(1);
-
   const handleMuteToggle = () => {
-    const video = videoRef.current;
-    if (!video) return;
-    if (video.muted) {
-      video.muted = false;
-      video.volume = prevVolume || 0.5;
-    } else {
-      setPrevVolume(video.volume);
-      video.muted = true;
-    }
+    onMuteToggle(isMuted ? undefined : volume);
   };
 
-  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const video = videoRef.current;
-    if (!video) return;
+  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(e.target.value);
-    video.volume = value;
-    video.muted = value === 0;
+    onVolumeChange(value);
   };
 
   return (
@@ -52,7 +41,7 @@ export default function VolumeControl({
         max={1}
         step={0.1}
         value={isMuted ? 0 : volume}
-        onChange={handleVolumeChange}
+        onChange={handleSliderChange}
         aria-label="Volume"
       />
     </div>

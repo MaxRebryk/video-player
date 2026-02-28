@@ -8,19 +8,19 @@ function getChapterAtTime(chapters: Chapter[], time: number): Chapter | null {
 }
 
 interface TimelineProps {
-  videoRef: React.RefObject<HTMLVideoElement | null>;
   chapters: Chapter[];
   videoLength: number;
   currentTime: number;
   isLoaded: boolean;
+  onSeek: (time: number) => void;
 }
 
 export default function Timeline({
-  videoRef,
   chapters,
   videoLength,
   currentTime,
   isLoaded,
+  onSeek,
 }: TimelineProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [hoverTime, setHoverTime] = useState<number | null>(null);
@@ -62,12 +62,11 @@ export default function Timeline({
 
   const handleClick = useCallback(
     (e: React.MouseEvent) => {
-      const video = videoRef.current;
-      if (!video || !isLoaded) return;
+      if (!isLoaded) return;
       const time = getTimeFromClientX(e.clientX);
-      video.currentTime = time;
+      onSeek(time);
     },
-    [videoRef, isLoaded, getTimeFromClientX],
+    [isLoaded, getTimeFromClientX, onSeek],
   );
 
   const progressPercent =

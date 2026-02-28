@@ -5,7 +5,7 @@ declare module "*.module.css" {
   export default classes;
 }
 
-declare module "@/video-player/mocs/video-data" {
+declare module "@/video-player/mocks/video-data" {
   interface Chapter {
     title: string;
     start: number;
